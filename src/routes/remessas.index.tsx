@@ -8,7 +8,7 @@ import { useList } from "@/lib/data";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-export const Route = createFileRoute("/remessas")({
+export const Route = createFileRoute("/remessas/")({
   head: () => ({ meta: [{ title: "Remessas" }] }),
   component: RemessasPage,
 });
