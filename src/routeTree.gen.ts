@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
 import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TiposTapeteRoute = TiposTapeteRouteImport.update({
+  id: '/tipos-tapete',
+  path: '/tipos-tapete',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CostureirasRoute = CostureirasRouteImport.update({
   id: '/costureiras',
   path: '/costureiras',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/costureiras'
+  fullPaths: '/' | '/costureiras' | '/tipos-tapete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/costureiras'
-  id: '__root__' | '/' | '/costureiras'
+  to: '/' | '/costureiras' | '/tipos-tapete'
+  id: '__root__' | '/' | '/costureiras' | '/tipos-tapete'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CostureirasRoute: typeof CostureirasRoute
+  TiposTapeteRoute: typeof TiposTapeteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tipos-tapete': {
+      id: '/tipos-tapete'
+      path: '/tipos-tapete'
+      fullPath: '/tipos-tapete'
+      preLoaderRoute: typeof TiposTapeteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/costureiras': {
       id: '/costureiras'
       path: '/costureiras'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CostureirasRoute: CostureirasRoute,
+  TiposTapeteRoute: TiposTapeteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
