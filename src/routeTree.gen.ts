@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
 
+const CostureirasRoute = CostureirasRouteImport.update({
+  id: '/costureiras',
+  path: '/costureiras',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/costureiras'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/costureiras'
+  id: '__root__' | '/' | '/costureiras'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CostureirasRoute: typeof CostureirasRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/costureiras': {
+      id: '/costureiras'
+      path: '/costureiras'
+      fullPath: '/costureiras'
+      preLoaderRoute: typeof CostureirasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +70,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CostureirasRoute: CostureirasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
