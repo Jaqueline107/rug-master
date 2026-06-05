@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
 import { Route as TapetesRouteImport } from './routes/tapetes'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as RemessasRouteImport } from './routes/remessas'
 import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as InsumosRouteImport } from './routes/insumos'
 import { Route as CostureirasRouteImport } from './routes/costureiras'
@@ -30,6 +31,11 @@ const TapetesRoute = TapetesRouteImport.update({
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemessasRoute = RemessasRouteImport.update({
+  id: '/remessas',
+  path: '/remessas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrecosRoute = PrecosRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
   '/precos': typeof PrecosRoute
+  '/remessas': typeof RemessasRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
   '/precos': typeof PrecosRoute
+  '/remessas': typeof RemessasRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
   '/precos': typeof PrecosRoute
+  '/remessas': typeof RemessasRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/costureiras'
     | '/insumos'
     | '/precos'
+    | '/remessas'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/costureiras'
     | '/insumos'
     | '/precos'
+    | '/remessas'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/costureiras'
     | '/insumos'
     | '/precos'
+    | '/remessas'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   CostureirasRoute: typeof CostureirasRoute
   InsumosRoute: typeof InsumosRoute
   PrecosRoute: typeof PrecosRoute
+  RemessasRoute: typeof RemessasRoute
   ServicosRoute: typeof ServicosRoute
   TapetesRoute: typeof TapetesRoute
   TiposTapeteRoute: typeof TiposTapeteRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/servicos'
       fullPath: '/servicos'
       preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remessas': {
+      id: '/remessas'
+      path: '/remessas'
+      fullPath: '/remessas'
+      preLoaderRoute: typeof RemessasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/precos': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   CostureirasRoute: CostureirasRoute,
   InsumosRoute: InsumosRoute,
   PrecosRoute: PrecosRoute,
+  RemessasRoute: RemessasRoute,
   ServicosRoute: ServicosRoute,
   TapetesRoute: TapetesRoute,
   TiposTapeteRoute: TiposTapeteRoute,
