@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
 import { Route as TapetesRouteImport } from './routes/tapetes'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as InsumosRouteImport } from './routes/insumos'
 import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const TapetesRoute = TapetesRouteImport.update({
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosRoute = PrecosRouteImport.update({
+  id: '/precos',
+  path: '/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsumosRoute = InsumosRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/precos'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/precos'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/precos'
     | '/servicos'
     | '/tapetes'
     | '/tipos-tapete'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CostureirasRoute: typeof CostureirasRoute
   InsumosRoute: typeof InsumosRoute
+  PrecosRoute: typeof PrecosRoute
   ServicosRoute: typeof ServicosRoute
   TapetesRoute: typeof TapetesRoute
   TiposTapeteRoute: typeof TiposTapeteRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/servicos'
       fullPath: '/servicos'
       preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos': {
+      id: '/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof PrecosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insumos': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CostureirasRoute: CostureirasRoute,
   InsumosRoute: InsumosRoute,
+  PrecosRoute: PrecosRoute,
   ServicosRoute: ServicosRoute,
   TapetesRoute: TapetesRoute,
   TiposTapeteRoute: TiposTapeteRoute,
