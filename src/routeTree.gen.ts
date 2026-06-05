@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
 import { Route as TapetesRouteImport } from './routes/tapetes'
+import { Route as InsumosRouteImport } from './routes/insumos'
 import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const TiposTapeteRoute = TiposTapeteRouteImport.update({
 const TapetesRoute = TapetesRouteImport.update({
   id: '/tapetes',
   path: '/tapetes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsumosRoute = InsumosRouteImport.update({
+  id: '/insumos',
+  path: '/insumos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CostureirasRoute = CostureirasRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
 }
@@ -51,20 +59,28 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
   '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/costureiras' | '/tapetes' | '/tipos-tapete'
+  fullPaths: '/' | '/costureiras' | '/insumos' | '/tapetes' | '/tipos-tapete'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/costureiras' | '/tapetes' | '/tipos-tapete'
-  id: '__root__' | '/' | '/costureiras' | '/tapetes' | '/tipos-tapete'
+  to: '/' | '/costureiras' | '/insumos' | '/tapetes' | '/tipos-tapete'
+  id:
+    | '__root__'
+    | '/'
+    | '/costureiras'
+    | '/insumos'
+    | '/tapetes'
+    | '/tipos-tapete'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CostureirasRoute: typeof CostureirasRoute
+  InsumosRoute: typeof InsumosRoute
   TapetesRoute: typeof TapetesRoute
   TiposTapeteRoute: typeof TiposTapeteRoute
 }
@@ -83,6 +99,13 @@ declare module '@tanstack/react-router' {
       path: '/tapetes'
       fullPath: '/tapetes'
       preLoaderRoute: typeof TapetesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insumos': {
+      id: '/insumos'
+      path: '/insumos'
+      fullPath: '/insumos'
+      preLoaderRoute: typeof InsumosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/costureiras': {
@@ -105,6 +128,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CostureirasRoute: CostureirasRoute,
+  InsumosRoute: InsumosRoute,
   TapetesRoute: TapetesRoute,
   TiposTapeteRoute: TiposTapeteRoute,
 }
