@@ -9,38 +9,201 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
+import { Route as TapetesRouteImport } from './routes/tapetes'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as InsumosRouteImport } from './routes/insumos'
+import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RemessasIndexRouteImport } from './routes/remessas.index'
+import { Route as RemessasNovaRouteImport } from './routes/remessas.nova'
+import { Route as RemessasIdRouteImport } from './routes/remessas.$id'
 
+const TiposTapeteRoute = TiposTapeteRouteImport.update({
+  id: '/tipos-tapete',
+  path: '/tipos-tapete',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TapetesRoute = TapetesRouteImport.update({
+  id: '/tapetes',
+  path: '/tapetes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosRoute = PrecosRouteImport.update({
+  id: '/precos',
+  path: '/precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsumosRoute = InsumosRouteImport.update({
+  id: '/insumos',
+  path: '/insumos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CostureirasRoute = CostureirasRouteImport.update({
+  id: '/costureiras',
+  path: '/costureiras',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RemessasIndexRoute = RemessasIndexRouteImport.update({
+  id: '/remessas/',
+  path: '/remessas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemessasNovaRoute = RemessasNovaRouteImport.update({
+  id: '/remessas/nova',
+  path: '/remessas/nova',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemessasIdRoute = RemessasIdRouteImport.update({
+  id: '/remessas/$id',
+  path: '/remessas/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
+  '/servicos': typeof ServicosRoute
+  '/tapetes': typeof TapetesRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
+  '/remessas/$id': typeof RemessasIdRoute
+  '/remessas/nova': typeof RemessasNovaRoute
+  '/remessas/': typeof RemessasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
+  '/servicos': typeof ServicosRoute
+  '/tapetes': typeof TapetesRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
+  '/remessas/$id': typeof RemessasIdRoute
+  '/remessas/nova': typeof RemessasNovaRoute
+  '/remessas': typeof RemessasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/costureiras': typeof CostureirasRoute
+  '/insumos': typeof InsumosRoute
+  '/precos': typeof PrecosRoute
+  '/servicos': typeof ServicosRoute
+  '/tapetes': typeof TapetesRoute
+  '/tipos-tapete': typeof TiposTapeteRoute
+  '/remessas/$id': typeof RemessasIdRoute
+  '/remessas/nova': typeof RemessasNovaRoute
+  '/remessas/': typeof RemessasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/costureiras'
+    | '/insumos'
+    | '/precos'
+    | '/servicos'
+    | '/tapetes'
+    | '/tipos-tapete'
+    | '/remessas/$id'
+    | '/remessas/nova'
+    | '/remessas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/costureiras'
+    | '/insumos'
+    | '/precos'
+    | '/servicos'
+    | '/tapetes'
+    | '/tipos-tapete'
+    | '/remessas/$id'
+    | '/remessas/nova'
+    | '/remessas'
+  id:
+    | '__root__'
+    | '/'
+    | '/costureiras'
+    | '/insumos'
+    | '/precos'
+    | '/servicos'
+    | '/tapetes'
+    | '/tipos-tapete'
+    | '/remessas/$id'
+    | '/remessas/nova'
+    | '/remessas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CostureirasRoute: typeof CostureirasRoute
+  InsumosRoute: typeof InsumosRoute
+  PrecosRoute: typeof PrecosRoute
+  ServicosRoute: typeof ServicosRoute
+  TapetesRoute: typeof TapetesRoute
+  TiposTapeteRoute: typeof TiposTapeteRoute
+  RemessasIdRoute: typeof RemessasIdRoute
+  RemessasNovaRoute: typeof RemessasNovaRoute
+  RemessasIndexRoute: typeof RemessasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tipos-tapete': {
+      id: '/tipos-tapete'
+      path: '/tipos-tapete'
+      fullPath: '/tipos-tapete'
+      preLoaderRoute: typeof TiposTapeteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tapetes': {
+      id: '/tapetes'
+      path: '/tapetes'
+      fullPath: '/tapetes'
+      preLoaderRoute: typeof TapetesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos': {
+      id: '/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof PrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insumos': {
+      id: '/insumos'
+      path: '/insumos'
+      fullPath: '/insumos'
+      preLoaderRoute: typeof InsumosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/costureiras': {
+      id: '/costureiras'
+      path: '/costureiras'
+      fullPath: '/costureiras'
+      preLoaderRoute: typeof CostureirasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +211,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/remessas/': {
+      id: '/remessas/'
+      path: '/remessas'
+      fullPath: '/remessas/'
+      preLoaderRoute: typeof RemessasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remessas/nova': {
+      id: '/remessas/nova'
+      path: '/remessas/nova'
+      fullPath: '/remessas/nova'
+      preLoaderRoute: typeof RemessasNovaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remessas/$id': {
+      id: '/remessas/$id'
+      path: '/remessas/$id'
+      fullPath: '/remessas/$id'
+      preLoaderRoute: typeof RemessasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CostureirasRoute: CostureirasRoute,
+  InsumosRoute: InsumosRoute,
+  PrecosRoute: PrecosRoute,
+  ServicosRoute: ServicosRoute,
+  TapetesRoute: TapetesRoute,
+  TiposTapeteRoute: TiposTapeteRoute,
+  RemessasIdRoute: RemessasIdRoute,
+  RemessasNovaRoute: RemessasNovaRoute,
+  RemessasIndexRoute: RemessasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
