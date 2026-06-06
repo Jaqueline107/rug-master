@@ -11,8 +11,8 @@ import { PageHeader } from "@/components/app-shell";
 import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers";
 import { useList, useUpsert, useDelete } from "@/lib/data";
 
-export const Route = createFileRoute("/tapetes")({
-  head: () => ({ meta: [{ title: "Tapetes" }] }),
+export const Route = createFileRoute("/modelos-tapetes")({
+  head: () => ({ meta: [{ title: "Modelos de Tapete" }] }),
   component: TapetesPage,
 });
 
@@ -29,18 +29,18 @@ function TapetesPage() {
   return (
     <>
       <PageHeader
-        title="Tapetes"
+        title="Modelos de Tapete"
         description="Modelos de tapete que você produz"
         action={
           <Button onClick={() => setEditing({})} disabled={tipos.length === 0}>
-            <Plus className="h-4 w-4 mr-2" /> Novo tapete
+            <Plus className="h-4 w-4 mr-2" /> Novo Modelo
           </Button>
         }
       />
 
       {tipos.length === 0 && (
         <div className="bg-warning/10 border border-warning/30 text-warning-foreground rounded-lg p-4 mb-4 text-sm">
-          Cadastre ao menos um <strong>tipo de tapete</strong> antes de criar tapetes.
+          Cadastre ao menos um <strong>tipo de tapete</strong> antes de criar modelos.
         </div>
       )}
 

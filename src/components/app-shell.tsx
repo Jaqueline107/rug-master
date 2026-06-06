@@ -17,7 +17,7 @@ const navItems = [
   { to: "/remessas", label: "Remessas", icon: Truck },
   { to: "/costureiras", label: "Costureiras", icon: Users },
   { to: "/tipos-tapete", label: "Tipos de Tapete", icon: Layers },
-  { to: "/tapetes", label: "Tapetes", icon: Package },
+  { to: "/modelos-tapetes", label: "Modelos de Tapete", icon: Package },
   { to: "/insumos", label: "Insumos", icon: Boxes },
   { to: "/servicos", label: "Serviços", icon: Wrench },
   { to: "/precos", label: "Tabela de Preços", icon: DollarSign },

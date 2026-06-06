@@ -8,13 +8,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowLeft, PackageCheck, Trash2 } from "lucide-react";
+import { ArrowLeft, PackageCheck, Printer, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { brl } from "@/lib/data";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { ImprimirRemessa } from "@/components/remessas/imprmir-remessa";
 
 export const Route = createFileRoute("/remessas/$id")({
   head: () => ({ meta: [{ title: "Detalhes da Remessa" }] }),
@@ -29,6 +30,7 @@ function statusBadge(status: string) {
 
 function RemessaDetailPage() {
   const { id } = Route.useParams();
+  const [showPrint, setShowPrint] = useState(false);
   const navigate = useNavigate();
   const qc = useQueryClient();
 
@@ -84,6 +86,9 @@ function RemessaDetailPage() {
         description={`${r.costureiras?.nome} • enviada em ${format(new Date(r.data_envio), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}`}
         action={
           <div className="flex gap-2 items-center">
+            <Button variant="outline" onClick={() => setShowPrint(true)}>
+            <Printer className="h-4 w-4 mr-2" /> Imprimir
+          </Button>
             {statusBadge(r.status)}
             {r.status !== "concluida" && (
               <Button onClick={() => setOpenRetorno(true)}>
@@ -155,15 +160,6 @@ function RemessaDetailPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge variant="outline">{totalItens} peça{totalItens !== 1 ? "s" : ""}</Badge>
-                    <Button variant="ghost" size="icon" onClick={async () => {
-                      if (!confirm("Excluir este retorno?")) return;
-                      await supabase.from("retornos").delete().eq("id", ret.id);
-                      qc.invalidateQueries({ queryKey: ["remessa", id] });
-                      qc.invalidateQueries({ queryKey: ["remessas"] });
-                      toast.success("Retorno removido");
-                    }}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
                   </div>
                 </div>
               );
@@ -171,7 +167,29 @@ function RemessaDetailPage() {
           </div>
         </div>
       )}
-
+     {showPrint && (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-auto p-6">
+          <ImprimirRemessa 
+            remessa={{
+              numero: r.numero,
+              data_envio: r.data_envio,
+              data_prevista_retorno: r.data_prevista_retorno,
+              costureira: r.costureiras,
+              observacoes: r.observacoes,
+              remessa_itens: itens.map((i: any) => ({
+                tapete: i.tapetes,
+                servico: i.servicos,
+                quantidade_enviada: i.quantidade_enviada,
+                quantidade_retornada: i.quantidade_retornada,
+                preco_unitario: i.preco_unitario,
+              }))
+            }}
+            onClose={() => setShowPrint(false)} 
+          />
+        </div>
+      </div>
+    )}
       <RetornoDialog
         open={openRetorno}
         onOpenChange={setOpenRetorno}

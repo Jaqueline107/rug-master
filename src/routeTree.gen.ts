@@ -10,9 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
-import { Route as TapetesRouteImport } from './routes/tapetes'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as ModelosTapetesRouteImport } from './routes/modelos-tapetes'
 import { Route as InsumosRouteImport } from './routes/insumos'
 import { Route as CostureirasRouteImport } from './routes/costureiras'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,11 +25,6 @@ const TiposTapeteRoute = TiposTapeteRouteImport.update({
   path: '/tipos-tapete',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TapetesRoute = TapetesRouteImport.update({
-  id: '/tapetes',
-  path: '/tapetes',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
@@ -38,6 +33,11 @@ const ServicosRoute = ServicosRouteImport.update({
 const PrecosRoute = PrecosRouteImport.update({
   id: '/precos',
   path: '/precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelosTapetesRoute = ModelosTapetesRouteImport.update({
+  id: '/modelos-tapetes',
+  path: '/modelos-tapetes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsumosRoute = InsumosRouteImport.update({
@@ -75,9 +75,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/modelos-tapetes': typeof ModelosTapetesRoute
   '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
-  '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
   '/remessas/$id': typeof RemessasIdRoute
   '/remessas/nova': typeof RemessasNovaRoute
@@ -87,9 +87,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/modelos-tapetes': typeof ModelosTapetesRoute
   '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
-  '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
   '/remessas/$id': typeof RemessasIdRoute
   '/remessas/nova': typeof RemessasNovaRoute
@@ -100,9 +100,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/costureiras': typeof CostureirasRoute
   '/insumos': typeof InsumosRoute
+  '/modelos-tapetes': typeof ModelosTapetesRoute
   '/precos': typeof PrecosRoute
   '/servicos': typeof ServicosRoute
-  '/tapetes': typeof TapetesRoute
   '/tipos-tapete': typeof TiposTapeteRoute
   '/remessas/$id': typeof RemessasIdRoute
   '/remessas/nova': typeof RemessasNovaRoute
@@ -114,9 +114,9 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/modelos-tapetes'
     | '/precos'
     | '/servicos'
-    | '/tapetes'
     | '/tipos-tapete'
     | '/remessas/$id'
     | '/remessas/nova'
@@ -126,9 +126,9 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/modelos-tapetes'
     | '/precos'
     | '/servicos'
-    | '/tapetes'
     | '/tipos-tapete'
     | '/remessas/$id'
     | '/remessas/nova'
@@ -138,9 +138,9 @@ export interface FileRouteTypes {
     | '/'
     | '/costureiras'
     | '/insumos'
+    | '/modelos-tapetes'
     | '/precos'
     | '/servicos'
-    | '/tapetes'
     | '/tipos-tapete'
     | '/remessas/$id'
     | '/remessas/nova'
@@ -151,9 +151,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CostureirasRoute: typeof CostureirasRoute
   InsumosRoute: typeof InsumosRoute
+  ModelosTapetesRoute: typeof ModelosTapetesRoute
   PrecosRoute: typeof PrecosRoute
   ServicosRoute: typeof ServicosRoute
-  TapetesRoute: typeof TapetesRoute
   TiposTapeteRoute: typeof TiposTapeteRoute
   RemessasIdRoute: typeof RemessasIdRoute
   RemessasNovaRoute: typeof RemessasNovaRoute
@@ -169,13 +169,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TiposTapeteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tapetes': {
-      id: '/tapetes'
-      path: '/tapetes'
-      fullPath: '/tapetes'
-      preLoaderRoute: typeof TapetesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/servicos': {
       id: '/servicos'
       path: '/servicos'
@@ -188,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/precos'
       fullPath: '/precos'
       preLoaderRoute: typeof PrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modelos-tapetes': {
+      id: '/modelos-tapetes'
+      path: '/modelos-tapetes'
+      fullPath: '/modelos-tapetes'
+      preLoaderRoute: typeof ModelosTapetesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insumos': {
@@ -239,9 +239,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CostureirasRoute: CostureirasRoute,
   InsumosRoute: InsumosRoute,
+  ModelosTapetesRoute: ModelosTapetesRoute,
   PrecosRoute: PrecosRoute,
   ServicosRoute: ServicosRoute,
-  TapetesRoute: TapetesRoute,
   TiposTapeteRoute: TiposTapeteRoute,
   RemessasIdRoute: RemessasIdRoute,
   RemessasNovaRoute: RemessasNovaRoute,
@@ -250,3 +250,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
