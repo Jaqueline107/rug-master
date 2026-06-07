@@ -57,6 +57,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
+          <p className="text-xs text-sidebar-foreground/70 mt-2 px-4 py-86">
+            &copy; Jaqueline Moura 2026. <br /> Todos os direitos reservados.
+          </p>
         </nav>
       </aside>
       <main className="flex-1 overflow-auto">
