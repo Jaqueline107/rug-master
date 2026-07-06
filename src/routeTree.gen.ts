@@ -22,6 +22,7 @@ import { Route as AuthenticatedRemessasIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedPagamentosIndexRouteImport } from './routes/_authenticated.pagamentos.index'
 import { Route as AuthenticatedRemessasNovaRouteImport } from './routes/_authenticated.remessas.nova'
 import { Route as AuthenticatedRemessasIdRouteImport } from './routes/_authenticated.remessas.$id'
+import { Route as AuthenticatedPagamentosNovoRouteImport } from './routes/_authenticated.pagamentos.novo'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -93,6 +94,12 @@ const AuthenticatedRemessasIdRoute = AuthenticatedRemessasIdRouteImport.update({
   path: '/remessas/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPagamentosNovoRoute =
+  AuthenticatedPagamentosNovoRouteImport.update({
+    id: '/pagamentos/novo',
+    path: '/pagamentos/novo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/precos': typeof AuthenticatedPrecosRoute
   '/servicos': typeof AuthenticatedServicosRoute
   '/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
+  '/pagamentos/novo': typeof AuthenticatedPagamentosNovoRoute
   '/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
   '/pagamentos/': typeof AuthenticatedPagamentosIndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/servicos': typeof AuthenticatedServicosRoute
   '/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
   '/': typeof AuthenticatedIndexRoute
+  '/pagamentos/novo': typeof AuthenticatedPagamentosNovoRoute
   '/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
   '/pagamentos': typeof AuthenticatedPagamentosIndexRoute
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/servicos': typeof AuthenticatedServicosRoute
   '/_authenticated/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/pagamentos/novo': typeof AuthenticatedPagamentosNovoRoute
   '/_authenticated/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/_authenticated/remessas/nova': typeof AuthenticatedRemessasNovaRoute
   '/_authenticated/pagamentos/': typeof AuthenticatedPagamentosIndexRoute
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/precos'
     | '/servicos'
     | '/tipos-tapete'
+    | '/pagamentos/novo'
     | '/remessas/$id'
     | '/remessas/nova'
     | '/pagamentos/'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/tipos-tapete'
     | '/'
+    | '/pagamentos/novo'
     | '/remessas/$id'
     | '/remessas/nova'
     | '/pagamentos'
@@ -178,6 +190,7 @@ export interface FileRouteTypes {
     | '/_authenticated/servicos'
     | '/_authenticated/tipos-tapete'
     | '/_authenticated/'
+    | '/_authenticated/pagamentos/novo'
     | '/_authenticated/remessas/$id'
     | '/_authenticated/remessas/nova'
     | '/_authenticated/pagamentos/'
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRemessasIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pagamentos/novo': {
+      id: '/_authenticated/pagamentos/novo'
+      path: '/pagamentos/novo'
+      fullPath: '/pagamentos/novo'
+      preLoaderRoute: typeof AuthenticatedPagamentosNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -293,6 +313,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedServicosRoute: typeof AuthenticatedServicosRoute
   AuthenticatedTiposTapeteRoute: typeof AuthenticatedTiposTapeteRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedPagamentosNovoRoute: typeof AuthenticatedPagamentosNovoRoute
   AuthenticatedRemessasIdRoute: typeof AuthenticatedRemessasIdRoute
   AuthenticatedRemessasNovaRoute: typeof AuthenticatedRemessasNovaRoute
   AuthenticatedPagamentosIndexRoute: typeof AuthenticatedPagamentosIndexRoute
@@ -307,6 +328,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedServicosRoute: AuthenticatedServicosRoute,
   AuthenticatedTiposTapeteRoute: AuthenticatedTiposTapeteRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedPagamentosNovoRoute: AuthenticatedPagamentosNovoRoute,
   AuthenticatedRemessasIdRoute: AuthenticatedRemessasIdRoute,
   AuthenticatedRemessasNovaRoute: AuthenticatedRemessasNovaRoute,
   AuthenticatedPagamentosIndexRoute: AuthenticatedPagamentosIndexRoute,
