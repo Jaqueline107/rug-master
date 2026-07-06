@@ -41,7 +41,7 @@ export const adminCreateUser = createServerFn({ method: "POST" })
     }
     if (data.permissions.length > 0) {
       await supabaseAdmin.from("user_permissions").insert(
-        data.permissions.map((p) => ({ user_id: uid, resource: p.resource, action: p.action }))
+        data.permissions.map((p) => ({ user_id: uid, resource: p.resource as any, action: p.action as any }))
       );
     }
     return { id: uid };
@@ -72,7 +72,7 @@ export const adminUpdatePermissions = createServerFn({ method: "POST" })
     await supabaseAdmin.from("user_permissions").delete().eq("user_id", data.userId);
     if (data.permissions.length > 0) {
       await supabaseAdmin.from("user_permissions").insert(
-        data.permissions.map((p) => ({ user_id: data.userId, resource: p.resource, action: p.action }))
+        data.permissions.map((p) => ({ user_id: data.userId, resource: p.resource as any, action: p.action as any }))
       );
     }
     return { ok: true };
