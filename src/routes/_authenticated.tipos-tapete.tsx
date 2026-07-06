@@ -10,27 +10,27 @@ import { PageHeader } from "@/components/app-shell";
 import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers";
 import { useList, useUpsert, useDelete } from "@/lib/data";
 
-export const Route = createFileRoute("/insumos")({
-  head: () => ({ meta: [{ title: "Insumos" }] }),
-  component: InsumosPage,
+export const Route = createFileRoute("/_authenticated/tipos-tapete")({
+  head: () => ({ meta: [{ title: "Tipos de Tapete" }] }),
+  component: TiposPage,
 });
 
-type Insumo = { id: string; nome: string; unidade: string; observacoes: string | null };
+type Tipo = { id: string; nome: string; numero_pecas: number; descricao: string | null };
 
-function InsumosPage() {
-  const { data: list = [], isLoading } = useList<Insumo>("insumos", { order: "nome" });
-  const upsert = useUpsert("insumos");
-  const del = useDelete("insumos");
-  const [editing, setEditing] = useState<Partial<Insumo> | null>(null);
+function TiposPage() {
+  const { data: list = [], isLoading } = useList<Tipo>("tipos_tapete", { order: "nome" });
+  const upsert = useUpsert("tipos_tapete");
+  const del = useDelete("tipos_tapete");
+  const [editing, setEditing] = useState<Partial<Tipo> | null>(null);
 
   return (
     <>
       <PageHeader
-        title="Insumos"
-        description="Materiais usados pelos serviços (linha, viés, fita, etc.)"
+        title="Tipos de Tapete"
+        description="Ex: Kit Banheiro 3 peças, Tapete simples, Jogo de cozinha"
         action={
-          <Button onClick={() => setEditing({ unidade: "un" })}>
-            <Plus className="h-4 w-4 mr-2" /> Novo insumo
+          <Button onClick={() => setEditing({ numero_pecas: 1 })}>
+            <Plus className="h-4 w-4 mr-2" /> Novo tipo
           </Button>
         }
       />
@@ -40,22 +40,22 @@ function InsumosPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Nome</TableHead>
-              <TableHead className="w-24">Unidade</TableHead>
-              <TableHead>Observações</TableHead>
+              <TableHead className="w-32">Nº de peças</TableHead>
+              <TableHead>Descrição</TableHead>
               <TableHead className="w-32 text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading && <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Carregando...</TableCell></TableRow>}
-            {!isLoading && list.length === 0 && <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Nenhum insumo cadastrado</TableCell></TableRow>}
-            {list.map((i) => (
-              <TableRow key={i.id}>
-                <TableCell className="font-medium">{i.nome}</TableCell>
-                <TableCell>{i.unidade}</TableCell>
-                <TableCell className="text-muted-foreground">{i.observacoes || "—"}</TableCell>
+            {!isLoading && list.length === 0 && <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Nenhum tipo cadastrado</TableCell></TableRow>}
+            {list.map((t) => (
+              <TableRow key={t.id}>
+                <TableCell className="font-medium">{t.nome}</TableCell>
+                <TableCell>{t.numero_pecas}</TableCell>
+                <TableCell className="text-muted-foreground">{t.descricao || "—"}</TableCell>
                 <TableCell className="text-right">
-                  <EditButton onClick={() => setEditing(i)} />
-                  <DeleteButton onConfirm={() => del.mutate(i.id)} />
+                  <EditButton onClick={() => setEditing(t)} />
+                  <DeleteButton onConfirm={() => del.mutate(t.id)} />
                 </TableCell>
               </TableRow>
             ))}
@@ -67,7 +67,7 @@ function InsumosPage() {
         <FormDialog
           open={!!editing}
           onOpenChange={(o) => !o && setEditing(null)}
-          title={editing.id ? "Editar insumo" : "Novo insumo"}
+          title={editing.id ? "Editar tipo" : "Novo tipo de tapete"}
           onSubmit={async () => { await upsert.mutateAsync(editing); setEditing(null); }}
         >
           <div className="space-y-2">
@@ -75,12 +75,12 @@ function InsumosPage() {
             <Input required value={editing.nome || ""} onChange={(e) => setEditing({ ...editing, nome: e.target.value })} />
           </div>
           <div className="space-y-2">
-            <Label>Unidade *</Label>
-            <Input required placeholder="un, m, kg..." value={editing.unidade || ""} onChange={(e) => setEditing({ ...editing, unidade: e.target.value })} />
+            <Label>Número de peças *</Label>
+            <Input type="number" min={1} required value={editing.numero_pecas ?? 1} onChange={(e) => setEditing({ ...editing, numero_pecas: parseInt(e.target.value) || 1 })} />
           </div>
           <div className="space-y-2">
-            <Label>Observações</Label>
-            <Textarea value={editing.observacoes || ""} onChange={(e) => setEditing({ ...editing, observacoes: e.target.value })} />
+            <Label>Descrição</Label>
+            <Textarea value={editing.descricao || ""} onChange={(e) => setEditing({ ...editing, descricao: e.target.value })} />
           </div>
         </FormDialog>
       )}

@@ -17,7 +17,7 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { ImprimirRemessa } from "@/components/remessas/imprmir-remessa";
 
-export const Route = createFileRoute("/remessas/$id")({
+export const Route = createFileRoute("/_authenticated/remessas/$id")({
   head: () => ({ meta: [{ title: "Detalhes da Remessa" }] }),
   component: RemessaDetailPage,
 });

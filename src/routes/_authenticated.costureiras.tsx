@@ -14,7 +14,7 @@ import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers"
 import { useList, useUpsert, useDelete } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/costureiras")({
+export const Route = createFileRoute("/_authenticated/costureiras")({
   head: () => ({ meta: [{ title: "Costureiras" }] }),
   component: CostureirasPage,
 });
