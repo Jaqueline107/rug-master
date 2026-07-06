@@ -19,6 +19,7 @@ import { Route as AuthenticatedModelosTapetesRouteImport } from './routes/_authe
 import { Route as AuthenticatedInsumosRouteImport } from './routes/_authenticated.insumos'
 import { Route as AuthenticatedCostureirasRouteImport } from './routes/_authenticated.costureiras'
 import { Route as AuthenticatedRemessasIndexRouteImport } from './routes/_authenticated.remessas.index'
+import { Route as AuthenticatedPagamentosIndexRouteImport } from './routes/_authenticated.pagamentos.index'
 import { Route as AuthenticatedRemessasNovaRouteImport } from './routes/_authenticated.remessas.nova'
 import { Route as AuthenticatedRemessasIdRouteImport } from './routes/_authenticated.remessas.$id'
 
@@ -75,6 +76,12 @@ const AuthenticatedRemessasIndexRoute =
     path: '/remessas/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPagamentosIndexRoute =
+  AuthenticatedPagamentosIndexRouteImport.update({
+    id: '/pagamentos/',
+    path: '/pagamentos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedRemessasNovaRoute =
   AuthenticatedRemessasNovaRouteImport.update({
     id: '/remessas/nova',
@@ -98,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
   '/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/pagamentos/': typeof AuthenticatedPagamentosIndexRoute
   '/remessas/': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRoutesByTo {
@@ -111,6 +119,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/pagamentos': typeof AuthenticatedPagamentosIndexRoute
   '/remessas': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRoutesById {
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/remessas/$id': typeof AuthenticatedRemessasIdRoute
   '/_authenticated/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/_authenticated/pagamentos/': typeof AuthenticatedPagamentosIndexRoute
   '/_authenticated/remessas/': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRouteTypes {
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/tipos-tapete'
     | '/remessas/$id'
     | '/remessas/nova'
+    | '/pagamentos/'
     | '/remessas/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/'
     | '/remessas/$id'
     | '/remessas/nova'
+    | '/pagamentos'
     | '/remessas'
   id:
     | '__root__'
@@ -168,6 +180,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/remessas/$id'
     | '/_authenticated/remessas/nova'
+    | '/_authenticated/pagamentos/'
     | '/_authenticated/remessas/'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRemessasIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pagamentos/': {
+      id: '/_authenticated/pagamentos/'
+      path: '/pagamentos'
+      fullPath: '/pagamentos/'
+      preLoaderRoute: typeof AuthenticatedPagamentosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/remessas/nova': {
       id: '/_authenticated/remessas/nova'
       path: '/remessas/nova'
@@ -275,6 +295,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedRemessasIdRoute: typeof AuthenticatedRemessasIdRoute
   AuthenticatedRemessasNovaRoute: typeof AuthenticatedRemessasNovaRoute
+  AuthenticatedPagamentosIndexRoute: typeof AuthenticatedPagamentosIndexRoute
   AuthenticatedRemessasIndexRoute: typeof AuthenticatedRemessasIndexRoute
 }
 
@@ -288,6 +309,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedRemessasIdRoute: AuthenticatedRemessasIdRoute,
   AuthenticatedRemessasNovaRoute: AuthenticatedRemessasNovaRoute,
+  AuthenticatedPagamentosIndexRoute: AuthenticatedPagamentosIndexRoute,
   AuthenticatedRemessasIndexRoute: AuthenticatedRemessasIndexRoute,
 }
 
