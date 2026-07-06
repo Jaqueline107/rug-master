@@ -74,6 +74,96 @@ export type Database = {
         }
         Relationships: []
       }
+      pagamento_remessas: {
+        Row: {
+          created_at: string
+          id: string
+          pagamento_id: string
+          remessa_id: string
+          valor_pago: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pagamento_id: string
+          remessa_id: string
+          valor_pago?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pagamento_id?: string
+          remessa_id?: string
+          valor_pago?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagamento_remessas_pagamento_id_fkey"
+            columns: ["pagamento_id"]
+            isOneToOne: false
+            referencedRelation: "pagamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pagamento_remessas_remessa_id_fkey"
+            columns: ["remessa_id"]
+            isOneToOne: false
+            referencedRelation: "remessas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pagamento_remessas_remessa_id_fkey"
+            columns: ["remessa_id"]
+            isOneToOne: false
+            referencedRelation: "remessas_a_pagar"
+            referencedColumns: ["remessa_id"]
+          },
+        ]
+      }
+      pagamentos: {
+        Row: {
+          comprovante_url: string | null
+          costureira_id: string
+          created_at: string
+          data_pagamento: string
+          forma_pagamento: string
+          id: string
+          observacoes: string | null
+          updated_at: string
+          valor_total: number
+        }
+        Insert: {
+          comprovante_url?: string | null
+          costureira_id: string
+          created_at?: string
+          data_pagamento?: string
+          forma_pagamento?: string
+          id?: string
+          observacoes?: string | null
+          updated_at?: string
+          valor_total?: number
+        }
+        Update: {
+          comprovante_url?: string | null
+          costureira_id?: string
+          created_at?: string
+          data_pagamento?: string
+          forma_pagamento?: string
+          id?: string
+          observacoes?: string | null
+          updated_at?: string
+          valor_total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagamentos_costureira_id_fkey"
+            columns: ["costureira_id"]
+            isOneToOne: false
+            referencedRelation: "costureiras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       precos: {
         Row: {
           costureira_id: string
@@ -126,6 +216,33 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          email: string | null
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          email?: string | null
+          id: string
+          nome?: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       remessa_itens: {
         Row: {
           created_at: string
@@ -164,6 +281,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "remessas"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "remessa_itens_remessa_id_fkey"
+            columns: ["remessa_id"]
+            isOneToOne: false
+            referencedRelation: "remessas_a_pagar"
+            referencedColumns: ["remessa_id"]
           },
           {
             foreignKeyName: "remessa_itens_servico_id_fkey"
@@ -294,6 +418,13 @@ export type Database = {
             referencedRelation: "remessas"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "retornos_remessa_id_fkey"
+            columns: ["remessa_id"]
+            isOneToOne: false
+            referencedRelation: "remessas_a_pagar"
+            referencedColumns: ["remessa_id"]
+          },
         ]
       }
       servicos: {
@@ -399,15 +530,103 @@ export type Database = {
         }
         Relationships: []
       }
+      user_permissions: {
+        Row: {
+          action: Database["public"]["Enums"]["app_action"]
+          created_at: string
+          resource: Database["public"]["Enums"]["app_resource"]
+          user_id: string
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["app_action"]
+          created_at?: string
+          resource: Database["public"]["Enums"]["app_resource"]
+          user_id: string
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["app_action"]
+          created_at?: string
+          resource?: Database["public"]["Enums"]["app_resource"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      remessas_a_pagar: {
+        Row: {
+          costureira_id: string | null
+          data_envio: string | null
+          numero: number | null
+          remessa_id: string | null
+          status: string | null
+          valor_devido: number | null
+          valor_ja_pago: number | null
+          valor_pendente: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remessas_costureira_id_fkey"
+            columns: ["costureira_id"]
+            isOneToOne: false
+            referencedRelation: "costureiras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      can: {
+        Args: {
+          _action: Database["public"]["Enums"]["app_action"]
+          _resource: Database["public"]["Enums"]["app_resource"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_action: "view" | "create" | "update" | "delete"
+      app_resource:
+        | "dashboard"
+        | "costureiras"
+        | "tipos_tapete"
+        | "modelos_tapetes"
+        | "insumos"
+        | "servicos"
+        | "precos"
+        | "remessas"
+        | "pagamentos"
+        | "usuarios"
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -534,6 +753,21 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_action: ["view", "create", "update", "delete"],
+      app_resource: [
+        "dashboard",
+        "costureiras",
+        "tipos_tapete",
+        "modelos_tapetes",
+        "insumos",
+        "servicos",
+        "precos",
+        "remessas",
+        "pagamentos",
+        "usuarios",
+      ],
+      app_role: ["admin", "user"],
+    },
   },
 } as const
