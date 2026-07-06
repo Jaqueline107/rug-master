@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { brl } from "@/lib/data";
 
-export const Route = createFileRoute("/precos")({
+export const Route = createFileRoute("/_authenticated/precos")({
   head: () => ({ meta: [{ title: "Tabela de Preços" }] }),
   component: PrecosPage,
 });

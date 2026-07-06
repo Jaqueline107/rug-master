@@ -9,243 +9,248 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TiposTapeteRouteImport } from './routes/tipos-tapete'
-import { Route as ServicosRouteImport } from './routes/servicos'
-import { Route as PrecosRouteImport } from './routes/precos'
-import { Route as ModelosTapetesRouteImport } from './routes/modelos-tapetes'
-import { Route as InsumosRouteImport } from './routes/insumos'
-import { Route as CostureirasRouteImport } from './routes/costureiras'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as RemessasIndexRouteImport } from './routes/remessas.index'
-import { Route as RemessasNovaRouteImport } from './routes/remessas.nova'
-import { Route as RemessasIdRouteImport } from './routes/remessas.$id'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
+import { Route as AuthenticatedTiposTapeteRouteImport } from './routes/_authenticated.tipos-tapete'
+import { Route as AuthenticatedServicosRouteImport } from './routes/_authenticated.servicos'
+import { Route as AuthenticatedPrecosRouteImport } from './routes/_authenticated.precos'
+import { Route as AuthenticatedModelosTapetesRouteImport } from './routes/_authenticated.modelos-tapetes'
+import { Route as AuthenticatedInsumosRouteImport } from './routes/_authenticated.insumos'
+import { Route as AuthenticatedCostureirasRouteImport } from './routes/_authenticated.costureiras'
+import { Route as AuthenticatedRemessasIndexRouteImport } from './routes/_authenticated.remessas.index'
+import { Route as AuthenticatedRemessasNovaRouteImport } from './routes/_authenticated.remessas.nova'
+import { Route as AuthenticatedRemessasIdRouteImport } from './routes/_authenticated.remessas.$id'
 
-const TiposTapeteRoute = TiposTapeteRouteImport.update({
-  id: '/tipos-tapete',
-  path: '/tipos-tapete',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicosRoute = ServicosRouteImport.update({
-  id: '/servicos',
-  path: '/servicos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrecosRoute = PrecosRouteImport.update({
-  id: '/precos',
-  path: '/precos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ModelosTapetesRoute = ModelosTapetesRouteImport.update({
-  id: '/modelos-tapetes',
-  path: '/modelos-tapetes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsumosRoute = InsumosRouteImport.update({
-  id: '/insumos',
-  path: '/insumos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CostureirasRoute = CostureirasRouteImport.update({
-  id: '/costureiras',
-  path: '/costureiras',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/_authenticated/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RemessasIndexRoute = RemessasIndexRouteImport.update({
-  id: '/remessas/',
-  path: '/remessas/',
+const AuthenticatedTiposTapeteRoute =
+  AuthenticatedTiposTapeteRouteImport.update({
+    id: '/_authenticated/tipos-tapete',
+    path: '/tipos-tapete',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedServicosRoute = AuthenticatedServicosRouteImport.update({
+  id: '/_authenticated/servicos',
+  path: '/servicos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RemessasNovaRoute = RemessasNovaRouteImport.update({
-  id: '/remessas/nova',
-  path: '/remessas/nova',
+const AuthenticatedPrecosRoute = AuthenticatedPrecosRouteImport.update({
+  id: '/_authenticated/precos',
+  path: '/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RemessasIdRoute = RemessasIdRouteImport.update({
-  id: '/remessas/$id',
+const AuthenticatedModelosTapetesRoute =
+  AuthenticatedModelosTapetesRouteImport.update({
+    id: '/_authenticated/modelos-tapetes',
+    path: '/modelos-tapetes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedInsumosRoute = AuthenticatedInsumosRouteImport.update({
+  id: '/_authenticated/insumos',
+  path: '/insumos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCostureirasRoute =
+  AuthenticatedCostureirasRouteImport.update({
+    id: '/_authenticated/costureiras',
+    path: '/costureiras',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedRemessasIndexRoute =
+  AuthenticatedRemessasIndexRouteImport.update({
+    id: '/_authenticated/remessas/',
+    path: '/remessas/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedRemessasNovaRoute =
+  AuthenticatedRemessasNovaRouteImport.update({
+    id: '/_authenticated/remessas/nova',
+    path: '/remessas/nova',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedRemessasIdRoute = AuthenticatedRemessasIdRouteImport.update({
+  id: '/_authenticated/remessas/$id',
   path: '/remessas/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/costureiras': typeof CostureirasRoute
-  '/insumos': typeof InsumosRoute
-  '/modelos-tapetes': typeof ModelosTapetesRoute
-  '/precos': typeof PrecosRoute
-  '/servicos': typeof ServicosRoute
-  '/tipos-tapete': typeof TiposTapeteRoute
-  '/remessas/$id': typeof RemessasIdRoute
-  '/remessas/nova': typeof RemessasNovaRoute
-  '/remessas/': typeof RemessasIndexRoute
+  '/costureiras': typeof AuthenticatedCostureirasRoute
+  '/insumos': typeof AuthenticatedInsumosRoute
+  '/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
+  '/precos': typeof AuthenticatedPrecosRoute
+  '/servicos': typeof AuthenticatedServicosRoute
+  '/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/remessas/$id': typeof AuthenticatedRemessasIdRoute
+  '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/remessas/': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/costureiras': typeof CostureirasRoute
-  '/insumos': typeof InsumosRoute
-  '/modelos-tapetes': typeof ModelosTapetesRoute
-  '/precos': typeof PrecosRoute
-  '/servicos': typeof ServicosRoute
-  '/tipos-tapete': typeof TiposTapeteRoute
-  '/remessas/$id': typeof RemessasIdRoute
-  '/remessas/nova': typeof RemessasNovaRoute
-  '/remessas': typeof RemessasIndexRoute
+  '/costureiras': typeof AuthenticatedCostureirasRoute
+  '/insumos': typeof AuthenticatedInsumosRoute
+  '/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
+  '/precos': typeof AuthenticatedPrecosRoute
+  '/servicos': typeof AuthenticatedServicosRoute
+  '/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/remessas/$id': typeof AuthenticatedRemessasIdRoute
+  '/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/remessas': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/costureiras': typeof CostureirasRoute
-  '/insumos': typeof InsumosRoute
-  '/modelos-tapetes': typeof ModelosTapetesRoute
-  '/precos': typeof PrecosRoute
-  '/servicos': typeof ServicosRoute
-  '/tipos-tapete': typeof TiposTapeteRoute
-  '/remessas/$id': typeof RemessasIdRoute
-  '/remessas/nova': typeof RemessasNovaRoute
-  '/remessas/': typeof RemessasIndexRoute
+  '/_authenticated/costureiras': typeof AuthenticatedCostureirasRoute
+  '/_authenticated/insumos': typeof AuthenticatedInsumosRoute
+  '/_authenticated/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
+  '/_authenticated/precos': typeof AuthenticatedPrecosRoute
+  '/_authenticated/servicos': typeof AuthenticatedServicosRoute
+  '/_authenticated/tipos-tapete': typeof AuthenticatedTiposTapeteRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/remessas/$id': typeof AuthenticatedRemessasIdRoute
+  '/_authenticated/remessas/nova': typeof AuthenticatedRemessasNovaRoute
+  '/_authenticated/remessas/': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/costureiras'
     | '/insumos'
     | '/modelos-tapetes'
     | '/precos'
     | '/servicos'
     | '/tipos-tapete'
+    | '/'
     | '/remessas/$id'
     | '/remessas/nova'
     | '/remessas/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/costureiras'
     | '/insumos'
     | '/modelos-tapetes'
     | '/precos'
     | '/servicos'
     | '/tipos-tapete'
+    | '/'
     | '/remessas/$id'
     | '/remessas/nova'
     | '/remessas'
   id:
     | '__root__'
-    | '/'
-    | '/costureiras'
-    | '/insumos'
-    | '/modelos-tapetes'
-    | '/precos'
-    | '/servicos'
-    | '/tipos-tapete'
-    | '/remessas/$id'
-    | '/remessas/nova'
-    | '/remessas/'
+    | '/_authenticated/costureiras'
+    | '/_authenticated/insumos'
+    | '/_authenticated/modelos-tapetes'
+    | '/_authenticated/precos'
+    | '/_authenticated/servicos'
+    | '/_authenticated/tipos-tapete'
+    | '/_authenticated/'
+    | '/_authenticated/remessas/$id'
+    | '/_authenticated/remessas/nova'
+    | '/_authenticated/remessas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CostureirasRoute: typeof CostureirasRoute
-  InsumosRoute: typeof InsumosRoute
-  ModelosTapetesRoute: typeof ModelosTapetesRoute
-  PrecosRoute: typeof PrecosRoute
-  ServicosRoute: typeof ServicosRoute
-  TiposTapeteRoute: typeof TiposTapeteRoute
-  RemessasIdRoute: typeof RemessasIdRoute
-  RemessasNovaRoute: typeof RemessasNovaRoute
-  RemessasIndexRoute: typeof RemessasIndexRoute
+  AuthenticatedCostureirasRoute: typeof AuthenticatedCostureirasRoute
+  AuthenticatedInsumosRoute: typeof AuthenticatedInsumosRoute
+  AuthenticatedModelosTapetesRoute: typeof AuthenticatedModelosTapetesRoute
+  AuthenticatedPrecosRoute: typeof AuthenticatedPrecosRoute
+  AuthenticatedServicosRoute: typeof AuthenticatedServicosRoute
+  AuthenticatedTiposTapeteRoute: typeof AuthenticatedTiposTapeteRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedRemessasIdRoute: typeof AuthenticatedRemessasIdRoute
+  AuthenticatedRemessasNovaRoute: typeof AuthenticatedRemessasNovaRoute
+  AuthenticatedRemessasIndexRoute: typeof AuthenticatedRemessasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tipos-tapete': {
-      id: '/tipos-tapete'
-      path: '/tipos-tapete'
-      fullPath: '/tipos-tapete'
-      preLoaderRoute: typeof TiposTapeteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/servicos': {
-      id: '/servicos'
-      path: '/servicos'
-      fullPath: '/servicos'
-      preLoaderRoute: typeof ServicosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/precos': {
-      id: '/precos'
-      path: '/precos'
-      fullPath: '/precos'
-      preLoaderRoute: typeof PrecosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/modelos-tapetes': {
-      id: '/modelos-tapetes'
-      path: '/modelos-tapetes'
-      fullPath: '/modelos-tapetes'
-      preLoaderRoute: typeof ModelosTapetesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insumos': {
-      id: '/insumos'
-      path: '/insumos'
-      fullPath: '/insumos'
-      preLoaderRoute: typeof InsumosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/costureiras': {
-      id: '/costureiras'
-      path: '/costureiras'
-      fullPath: '/costureiras'
-      preLoaderRoute: typeof CostureirasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/remessas/': {
-      id: '/remessas/'
+    '/_authenticated/tipos-tapete': {
+      id: '/_authenticated/tipos-tapete'
+      path: '/tipos-tapete'
+      fullPath: '/tipos-tapete'
+      preLoaderRoute: typeof AuthenticatedTiposTapeteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/servicos': {
+      id: '/_authenticated/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof AuthenticatedServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/precos': {
+      id: '/_authenticated/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof AuthenticatedPrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/modelos-tapetes': {
+      id: '/_authenticated/modelos-tapetes'
+      path: '/modelos-tapetes'
+      fullPath: '/modelos-tapetes'
+      preLoaderRoute: typeof AuthenticatedModelosTapetesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/insumos': {
+      id: '/_authenticated/insumos'
+      path: '/insumos'
+      fullPath: '/insumos'
+      preLoaderRoute: typeof AuthenticatedInsumosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/costureiras': {
+      id: '/_authenticated/costureiras'
+      path: '/costureiras'
+      fullPath: '/costureiras'
+      preLoaderRoute: typeof AuthenticatedCostureirasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/remessas/': {
+      id: '/_authenticated/remessas/'
       path: '/remessas'
       fullPath: '/remessas/'
-      preLoaderRoute: typeof RemessasIndexRouteImport
+      preLoaderRoute: typeof AuthenticatedRemessasIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/remessas/nova': {
-      id: '/remessas/nova'
+    '/_authenticated/remessas/nova': {
+      id: '/_authenticated/remessas/nova'
       path: '/remessas/nova'
       fullPath: '/remessas/nova'
-      preLoaderRoute: typeof RemessasNovaRouteImport
+      preLoaderRoute: typeof AuthenticatedRemessasNovaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/remessas/$id': {
-      id: '/remessas/$id'
+    '/_authenticated/remessas/$id': {
+      id: '/_authenticated/remessas/$id'
       path: '/remessas/$id'
       fullPath: '/remessas/$id'
-      preLoaderRoute: typeof RemessasIdRouteImport
+      preLoaderRoute: typeof AuthenticatedRemessasIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CostureirasRoute: CostureirasRoute,
-  InsumosRoute: InsumosRoute,
-  ModelosTapetesRoute: ModelosTapetesRoute,
-  PrecosRoute: PrecosRoute,
-  ServicosRoute: ServicosRoute,
-  TiposTapeteRoute: TiposTapeteRoute,
-  RemessasIdRoute: RemessasIdRoute,
-  RemessasNovaRoute: RemessasNovaRoute,
-  RemessasIndexRoute: RemessasIndexRoute,
+  AuthenticatedCostureirasRoute: AuthenticatedCostureirasRoute,
+  AuthenticatedInsumosRoute: AuthenticatedInsumosRoute,
+  AuthenticatedModelosTapetesRoute: AuthenticatedModelosTapetesRoute,
+  AuthenticatedPrecosRoute: AuthenticatedPrecosRoute,
+  AuthenticatedServicosRoute: AuthenticatedServicosRoute,
+  AuthenticatedTiposTapeteRoute: AuthenticatedTiposTapeteRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedRemessasIdRoute: AuthenticatedRemessasIdRoute,
+  AuthenticatedRemessasNovaRoute: AuthenticatedRemessasNovaRoute,
+  AuthenticatedRemessasIndexRoute: AuthenticatedRemessasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

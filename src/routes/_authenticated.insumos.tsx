@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/app-shell";
 import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers";
 import { useList, useUpsert, useDelete } from "@/lib/data";
 
-export const Route = createFileRoute("/insumos")({
+export const Route = createFileRoute("/_authenticated/insumos")({
   head: () => ({ meta: [{ title: "Insumos" }] }),
   component: InsumosPage,
 });

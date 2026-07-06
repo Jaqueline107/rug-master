@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const Route = createFileRoute("/remessas/nova")({
+export const Route = createFileRoute("/_authenticated/remessas/nova")({
   head: () => ({ meta: [{ title: "Nova Remessa" }] }),
   component: NovaRemessaPage,
 });

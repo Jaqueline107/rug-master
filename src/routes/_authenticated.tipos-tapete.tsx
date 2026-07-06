@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/app-shell";
 import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers";
 import { useList, useUpsert, useDelete } from "@/lib/data";
 
-export const Route = createFileRoute("/tipos-tapete")({
+export const Route = createFileRoute("/_authenticated/tipos-tapete")({
   head: () => ({ meta: [{ title: "Tipos de Tapete" }] }),
   component: TiposPage,
 });

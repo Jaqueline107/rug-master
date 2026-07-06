@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/app-shell";
 import { FormDialog, EditButton, DeleteButton } from "@/components/crud-helpers";
 import { useList, useUpsert, useDelete } from "@/lib/data";
 
-export const Route = createFileRoute("/modelos-tapetes")({
+export const Route = createFileRoute("/_authenticated/modelos-tapetes")({
   head: () => ({ meta: [{ title: "Modelos de Tapete" }] }),
   component: TapetesPage,
 });
