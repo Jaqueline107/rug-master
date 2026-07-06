@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
 import { Route as AuthenticatedTiposTapeteRouteImport } from './routes/_authenticated.tipos-tapete'
@@ -21,6 +22,11 @@ import { Route as AuthenticatedRemessasIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRemessasNovaRouteImport } from './routes/_authenticated.remessas.nova'
 import { Route as AuthenticatedRemessasIdRouteImport } from './routes/_authenticated.remessas.$id'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -83,6 +89,7 @@ const AuthenticatedRemessasIdRoute = AuthenticatedRemessasIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
   '/costureiras': typeof AuthenticatedCostureirasRoute
   '/insumos': typeof AuthenticatedInsumosRoute
   '/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/remessas/': typeof AuthenticatedRemessasIndexRoute
 }
 export interface FileRoutesByTo {
+  '/auth': typeof AuthRoute
   '/costureiras': typeof AuthenticatedCostureirasRoute
   '/insumos': typeof AuthenticatedInsumosRoute
   '/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
@@ -108,6 +116,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRoute
   '/_authenticated/costureiras': typeof AuthenticatedCostureirasRoute
   '/_authenticated/insumos': typeof AuthenticatedInsumosRoute
   '/_authenticated/modelos-tapetes': typeof AuthenticatedModelosTapetesRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/costureiras'
     | '/insumos'
     | '/modelos-tapetes'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
     | '/remessas/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth'
     | '/costureiras'
     | '/insumos'
     | '/modelos-tapetes'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/auth'
     | '/_authenticated/costureiras'
     | '/_authenticated/insumos'
     | '/_authenticated/modelos-tapetes'
@@ -161,10 +173,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -277,6 +297,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
