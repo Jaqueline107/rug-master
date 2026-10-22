@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/pagamentos/")({
 function PagamentosPage() {
   const qc = useQueryClient();
   const podeExcluir = usePermission("pagamentos", "delete");
-  const { data = [] } = useQuery({
+  const { data = [], isPending, isError, refetch } = useQuery({
     queryKey: ["pagamentos"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -43,6 +43,7 @@ function PagamentosPage() {
     if (error) return toast.error(error.message);
     toast.success("Pagamento excluído");
     qc.invalidateQueries({ queryKey: ["pagamentos"] });
+    qc.invalidateQueries({ queryKey: ["remessas-a-pagar"] });
   }
 
   return (
@@ -62,7 +63,14 @@ function PagamentosPage() {
       />
 
       <div className="bg-card rounded-lg border">
-        {data.length === 0 ? (
+        {isPending ? (
+          <div className="p-12 text-center text-muted-foreground" role="status">Carregando pagamentos...</div>
+        ) : isError ? (
+          <div className="p-12 text-center space-y-3" role="alert">
+            <p className="text-sm text-destructive">Não foi possível carregar os pagamentos. Tente novamente; se o erro continuar, verifique a configuração de pagamentos no Supabase.</p>
+            <Button variant="outline" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
+          </div>
+        ) : data.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">
             Nenhum pagamento registrado.
           </div>

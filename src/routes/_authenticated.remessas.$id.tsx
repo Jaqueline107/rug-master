@@ -198,6 +198,7 @@ function RemessaDetailPage() {
         onSaved={() => {
           qc.invalidateQueries({ queryKey: ["remessa", id] });
           qc.invalidateQueries({ queryKey: ["remessas"] });
+          qc.invalidateQueries({ queryKey: ["remessas-a-pagar"] });
         }}
       />
     </>

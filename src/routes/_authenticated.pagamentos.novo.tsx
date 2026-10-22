@@ -42,7 +42,7 @@ function NovoPagamentoPage() {
     },
   });
 
-  const { data: pendentes = [] } = useQuery({
+  const { data: pendentes = [], isPending: carregandoPendentes, isError: erroPendentes, refetch: recarregarPendentes } = useQuery({
     queryKey: ["remessas-a-pagar", costureiraId],
     enabled: !!costureiraId,
     queryFn: async () => {
@@ -146,6 +146,7 @@ function NovoPagamentoPage() {
 
       toast.success("Pagamento registrado");
       qc.invalidateQueries({ queryKey: ["pagamentos"] });
+      qc.invalidateQueries({ queryKey: ["remessas-a-pagar"] });
       nav({ to: "/pagamentos" });
     } catch (e: any) {
       toast.error(e.message || "Erro ao salvar");
@@ -188,7 +189,16 @@ function NovoPagamentoPage() {
                 </Button>
               )}
             </div>
-            {pendentes.length === 0 ? (
+            {carregandoPendentes ? (
+              <div className="p-8 text-center text-muted-foreground text-sm" role="status">
+                Carregando remessas a pagar...
+              </div>
+            ) : erroPendentes ? (
+              <div className="p-8 text-center space-y-3" role="alert">
+                <p className="text-sm text-destructive">Não foi possível carregar as remessas a pagar. Tente novamente; se o erro continuar, verifique a configuração de pagamentos no Supabase.</p>
+                <Button variant="outline" size="sm" onClick={() => recarregarPendentes()}>Tentar novamente</Button>
+              </div>
+            ) : pendentes.length === 0 ? (
               <div className="p-8 text-center text-muted-foreground text-sm">
                 Nenhuma remessa pendente para essa costureira.
               </div>
