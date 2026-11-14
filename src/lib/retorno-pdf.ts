@@ -2,66 +2,115 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
 type FolhaRetorno = {
-  numero: number; ordem: number; costureira: string; dataEnvio: string;
+  numero: number;
+  ordem: number;
+  costureira: string;
+  dataEnvio: string;
   observacoes?: string | null;
   itens: { carro: string; tipo: string; material: string; enviado: number; pendente: number }[];
 };
 
 export function gerarRetornoPdf(folha: FolhaRetorno) {
   const doc = new jsPDF({ format: "a4", unit: "mm" });
-  const titulo = folha.ordem + "º RETORNO DA REMESSA #" + folha.numero;
-  const margem = 12;
   const largura = doc.internal.pageSize.getWidth();
+  const margem = 3.5;
   const limite = largura - margem;
-  const linha = (x1: number, y: number, x2: number) => doc.line(x1, y, x2, y);
+  const titulo = `${folha.ordem}º RETORNO DA REMESSA #${folha.numero}`;
+  const linhas = folha.itens.map((item) => [
+    item.carro, item.tipo, item.material, String(item.enviado), String(item.pendente), "",
+  ]);
+  while (linhas.length < 8) linhas.push(["", "", "", "", "", ""]);
+
+  function campo(label: string, valor: string, x: number, inicio: number, fim: number, y: number) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text(label, x, y);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6);
+    const texto = doc.splitTextToSize(valor, fim - inicio - 2) as string[];
+    doc.text(texto.slice(0, 2), inicio + 1, y - (texto.length > 1 ? 2 : 0));
+    doc.setLineWidth(0.17);
+    doc.line(inicio, y + 1.3, fim, y + 1.3);
+  }
 
   autoTable(doc, {
-    margin: { top: 42, left: margem, right: margem, bottom: 15 },
-    head: [["Carro", "Tipo Tapete", "Material", "Enviado", "Pendente", "Retirando"]],
-    body: folha.itens.map((i) => [i.carro, i.tipo, i.material, i.enviado, i.pendente, ""]),
+    margin: { top: 38, left: margem, right: margem, bottom: 15 },
+    head: [["CARRO", "TIPO TAPETE", "MATERIAL", "ENVIADO", "PENDENTE", "RETIRANDO"]],
+    body: linhas,
     theme: "grid",
     rowPageBreak: "avoid",
-    styles: { fontSize: 9, minCellHeight: 9, textColor: 0, lineColor: 60, lineWidth: 0.18, valign: "middle" },
-    headStyles: { fillColor: 235, textColor: 0 },
-    columnStyles: { 3: { halign: "center", cellWidth: 19 }, 4: { halign: "center", cellWidth: 19 }, 5: { cellWidth: 24 } },
+    styles: {
+      font: "helvetica",
+      fontSize: 7.5,
+      minCellHeight: 4.5,
+      cellPadding: { top: 0.5, bottom: 0.5, left: 1, right: 1 },
+      fillColor: 255,
+      textColor: 0,
+      lineColor: 0,
+      lineWidth: 0.2,
+      halign: "center",
+      valign: "middle",
+    },
+    headStyles: { fillColor: 255, fontSize: 8.5, lineWidth: 0.35, minCellHeight: 4.9 },
+    columnStyles: {
+      0: { cellWidth: 40.6 },
+      1: { cellWidth: 40.6 },
+      2: { cellWidth: 40.6 },
+      3: { cellWidth: 27.05 },
+      4: { cellWidth: 27.05 },
+      5: { cellWidth: 27.1 },
+    },
     willDrawPage: () => {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(14);
-      doc.text(titulo, largura / 2, 17, { align: "center" });
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      const nome = doc.splitTextToSize("Costureira: " + folha.costureira, limite - margem);
-      doc.text(nome.slice(0, 2), margem, 25);
-      doc.text("Data do Envio: " + folha.dataEnvio, margem, 37);
-      doc.text("Data do Retorno:", 110, 37);
-      linha(138, 37.5, limite);
+      doc.text(titulo, largura / 2, 27, { align: "center" });
+      campo("COSTUREIRA:", folha.costureira, 9, 30.5, 58, 34.4);
+      campo("DATA DO ENVIO:", folha.dataEnvio, 63, 87, 114.5, 34.4);
+      campo("DATA DO RETORNO:", "", 126, 155.5, 182.5, 34.4);
     },
   });
-  let y = ((doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 42) + 9;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
+  let y = ((doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 38) + 5.5;
   const observacao = folha.observacoes?.trim();
+  doc.setFontSize(8.5);
   if (observacao) {
-    const lines: string[] = doc.splitTextToSize("Observação Remessa: " + observacao, limite - margem);
-    for (const texto of lines) {
-      if (y > 278) { doc.addPage(); y = 18; }
-      doc.text(texto, margem, y);
-      y += 5;
+    if (y > 272) {
+      doc.addPage();
+      y = 18;
     }
-    y += 4;
+    doc.setFont("helvetica", "bold");
+    doc.text("OBSERVAÇÃO REMESSA:", 8.5, y);
+    doc.setFont("helvetica", "normal");
+    const linhasObs = doc.splitTextToSize(observacao, limite - 49) as string[];
+    for (const linha of linhasObs) {
+      if (y > 278) {
+        doc.addPage();
+        y = 18;
+      }
+      doc.text(linha, 49, y);
+      y += 4.5;
+    }
   }
-  if (y + 32 > 282) { doc.addPage(); y = 18; }
-  doc.text("Observação Retorno:", margem, y);
-  linha(49, y + 1, limite);
-  linha(margem, y + 9, limite);
-  const meio = largura / 2;
-  linha(margem, y + 25, meio - 6);
-  linha(meio + 6, y + 25, limite);
-  doc.text("Motorista", (margem + meio - 6) / 2, y + 31, { align: "center" });
-  doc.text("Costureira", (meio + 6 + limite) / 2, y + 31, { align: "center" });
+  if (y > 274) {
+    doc.addPage();
+    y = 18;
+  }
+  doc.setFont("helvetica", "bold");
+  doc.text("OBSERVAÇÃO RETORNO:", 8.5, y);
+  doc.setLineWidth(0.17);
+  doc.line(44, y + 1.5, limite, y + 1.5);
+  y += 9.5;
+  doc.text("MOTORISTA:", 11, y);
+  doc.text("COSTUREIRA:", 117.5, y);
+  doc.setLineWidth(0.4);
+  doc.line(30.5, y + 1.4, 98.5, y + 1.4);
+  doc.line(138.5, y + 1.4, limite, y + 1.4);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7);
+  doc.text("ASSINATURA", 64.5, y + 4.5, { align: "center" });
+  doc.text("ASSINATURA", (138.5 + limite) / 2, y + 4.5, { align: "center" });
   return doc;
 }
 
 export function baixarRetornoPdf(folha: FolhaRetorno) {
-  gerarRetornoPdf(folha).save("retorno-" + folha.ordem + "-remessa-" + folha.numero + ".pdf");
+  gerarRetornoPdf(folha).save(`retorno-${folha.ordem}-remessa-${folha.numero}.pdf`);
 }

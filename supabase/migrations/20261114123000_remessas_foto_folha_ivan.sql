@@ -23,30 +23,6 @@ USING (bucket_id = 'folhas-ivan' AND (storage.foldername(name))[1] = (SELECT aut
   AND public.can(auth.uid(), 'remessas', 'view')
   AND NOT EXISTS (SELECT 1 FROM public.remessas r WHERE r.foto_folha_ivan_path = name));
 
-CREATE FUNCTION public.validar_foto_folha_ivan()
-RETURNS trigger LANGUAGE plpgsql SET search_path = '' AS $$
-BEGIN
-  IF TG_OP = 'UPDATE' THEN
-    IF NEW.foto_folha_ivan_path IS NOT DISTINCT FROM OLD.foto_folha_ivan_path THEN
-      RETURN NEW;
-    END IF;
-  END IF;
-  IF NEW.foto_folha_ivan_path IS NULL
-    OR split_part(NEW.foto_folha_ivan_path, '/', 1) IS DISTINCT FROM auth.uid()::text
-    OR NOT EXISTS (
-      SELECT 1 FROM storage.objects o WHERE o.bucket_id = 'folhas-ivan' AND o.name = NEW.foto_folha_ivan_path
-    )
-  THEN
-    RAISE EXCEPTION 'Anexe uma foto da Folha Ivan para criar a remessa.' USING ERRCODE = '23514';
-  END IF;
-  RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER validar_foto_folha_ivan BEFORE INSERT OR UPDATE OF foto_folha_ivan_path
-ON public.remessas FOR EACH ROW EXECUTE FUNCTION public.validar_foto_folha_ivan();
-REVOKE EXECUTE ON FUNCTION public.validar_foto_folha_ivan() FROM PUBLIC, anon, authenticated;
-
 CREATE FUNCTION public.criar_remessa_com_folha_ivan(
   p_costureira_id uuid, p_data_envio date, p_data_prevista_retorno date,
   p_observacoes text, p_foto text, p_itens jsonb
@@ -56,12 +32,29 @@ DECLARE
   v_id uuid;
   v_numero integer;
 BEGIN
+  IF p_foto IS NULL
+    OR split_part(p_foto, '/', 1) IS DISTINCT FROM auth.uid()::text
+    OR NOT EXISTS (
+      SELECT 1 FROM storage.objects o WHERE o.bucket_id = 'folhas-ivan' AND o.name = p_foto
+    )
+  THEN
+    RAISE EXCEPTION 'Anexe uma foto da Folha Ivan para criar a remessa.' USING ERRCODE = '23514';
+  END IF;
   IF p_itens IS NULL OR jsonb_typeof(p_itens) <> 'array' THEN
     RAISE EXCEPTION 'Informe os itens da remessa.';
   END IF;
   IF jsonb_array_length(p_itens) = 0 THEN
     RAISE EXCEPTION 'Adicione ao menos um item.';
   END IF;
+  IF EXISTS (
+    SELECT 1 FROM jsonb_to_recordset(p_itens) AS i(tapete_id uuid, servico_id uuid)
+    WHERE NOT EXISTS (
+      SELECT 1 FROM public.tapetes t WHERE t.id = i.tapete_id AND i.servico_id = ANY(t.servicos_permitidos)
+    )
+  ) THEN
+    RAISE EXCEPTION 'Este serviço não está permitido para o modelo de tapete.' USING ERRCODE = '23514';
+  END IF;
+
   INSERT INTO public.remessas AS r (costureira_id, data_envio, data_prevista_retorno, observacoes, foto_folha_ivan_path)
   VALUES (p_costureira_id, p_data_envio, p_data_prevista_retorno, p_observacoes, p_foto)
   RETURNING r.id, r.numero INTO v_id, v_numero;

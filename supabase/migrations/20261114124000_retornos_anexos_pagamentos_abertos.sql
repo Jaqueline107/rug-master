@@ -45,11 +45,12 @@ BEGIN
   END IF;
   PERFORM 1 FROM public.remessas WHERE id = NEW.remessa_id FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Remessa não encontrada.'; END IF;
-  IF NEW.foto_retorno_path IS NULL
-    OR split_part(NEW.foto_retorno_path, '/', 1) IS DISTINCT FROM auth.uid()::text
+  IF NEW.foto_retorno_path IS NOT NULL AND (
+    split_part(NEW.foto_retorno_path, '/', 1) IS DISTINCT FROM auth.uid()::text
     OR NOT EXISTS (
       SELECT 1 FROM storage.objects o WHERE o.bucket_id = 'fotos-retornos' AND o.name = NEW.foto_retorno_path
     )
+  )
   THEN
     RAISE EXCEPTION 'Anexe uma foto da folha de retorno preenchida.' USING ERRCODE = '23514';
   END IF;
@@ -70,6 +71,9 @@ DECLARE
   v_item record;
   v_pendente integer;
 BEGIN
+  IF p_foto IS NULL THEN
+    RAISE EXCEPTION 'Anexe uma foto da folha de retorno preenchida.' USING ERRCODE = '23514';
+  END IF;
   IF p_itens IS NULL OR jsonb_typeof(p_itens) <> 'array' THEN
     RAISE EXCEPTION 'Informe os itens do retorno.';
   END IF;
