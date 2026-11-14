@@ -311,6 +311,7 @@ export type Database = {
           created_at: string
           data_envio: string
           data_prevista_retorno: string | null
+          foto_folha_ivan_path: string | null
           id: string
           numero: number
           observacoes: string | null
@@ -322,6 +323,7 @@ export type Database = {
           created_at?: string
           data_envio?: string
           data_prevista_retorno?: string | null
+          foto_folha_ivan_path?: string | null
           id?: string
           numero?: number
           observacoes?: string | null
@@ -333,6 +335,7 @@ export type Database = {
           created_at?: string
           data_envio?: string
           data_prevista_retorno?: string | null
+          foto_folha_ivan_path?: string | null
           id?: string
           numero?: number
           observacoes?: string | null
@@ -390,6 +393,8 @@ export type Database = {
       }
       retornos: {
         Row: {
+          foto_retorno_path: string | null
+          ordem: number
           created_at: string
           data_retorno: string
           id: string
@@ -397,6 +402,8 @@ export type Database = {
           remessa_id: string
         }
         Insert: {
+          foto_retorno_path?: string | null
+          ordem?: number
           created_at?: string
           data_retorno?: string
           id?: string
@@ -404,6 +411,8 @@ export type Database = {
           remessa_id: string
         }
         Update: {
+          foto_retorno_path?: string | null
+          ordem?: number
           created_at?: string
           data_retorno?: string
           id?: string
@@ -464,32 +473,44 @@ export type Database = {
       }
       tapetes: {
         Row: {
+          ano_fim: number | null
+          ano_inicio: number | null
           codigo: string | null
           cor: string | null
           created_at: string
           id: string
+          materiais: string[]
           nome: string
           observacoes: string | null
+          servicos_permitidos: string[]
           tipo_tapete_id: string
           updated_at: string
         }
         Insert: {
+          ano_fim?: number | null
+          ano_inicio?: number | null
           codigo?: string | null
           cor?: string | null
           created_at?: string
           id?: string
+          materiais?: string[]
           nome: string
           observacoes?: string | null
+          servicos_permitidos?: string[]
           tipo_tapete_id: string
           updated_at?: string
         }
         Update: {
+          ano_fim?: number | null
+          ano_inicio?: number | null
           codigo?: string | null
           cor?: string | null
           created_at?: string
           id?: string
+          materiais?: string[]
           nome?: string
           observacoes?: string | null
+          servicos_permitidos?: string[]
           tipo_tapete_id?: string
           updated_at?: string
         }
@@ -576,6 +597,8 @@ export type Database = {
     Views: {
       remessas_a_pagar: {
         Row: {
+          saldo_total_enviado: number | null
+          valor_total_enviado: number | null
           costureira_id: string | null
           data_envio: string | null
           numero: number | null
@@ -597,6 +620,27 @@ export type Database = {
       }
     }
     Functions: {
+      registrar_retorno_com_foto: {
+        Args: {
+          p_remessa_id: string
+          p_data_retorno: string
+          p_observacoes: string | null
+          p_foto: string
+          p_itens: Json
+        }
+        Returns: string
+      }
+      criar_remessa_com_folha_ivan: {
+        Args: {
+          p_costureira_id: string
+          p_data_envio: string
+          p_data_prevista_retorno: string | null
+          p_observacoes: string | null
+          p_foto: string
+          p_itens: Json
+        }
+        Returns: { id: string; numero: number }[]
+      }
       can: {
         Args: {
           _action: Database["public"]["Enums"]["app_action"]

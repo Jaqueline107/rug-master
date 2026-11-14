@@ -2,11 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, ArrowRight } from "lucide-react";
+import { Plus, ArrowRight, Download } from "lucide-react";
 import { PageHeader } from "@/components/app-shell";
 import { useList } from "@/lib/data";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+import folhaIvanUrl from "../assets/folha-ivan-nova-remessa.pdf?url";
 
 export const Route = createFileRoute("/_authenticated/remessas/")({
   head: () => ({ meta: [{ title: "Remessas" }] }),
@@ -33,9 +35,16 @@ function RemessasPage() {
         title="Remessas"
         description="Controle de envios e retornos"
         action={
-          <Link to="/remessas/nova">
-            <Button><Plus className="h-4 w-4 mr-2" /> Nova remessa</Button>
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button asChild variant="outline">
+              <a href={folhaIvanUrl} download="folha-ivan-nova-remessa.pdf">
+                <Download className="h-4 w-4" /> Folha Ivan - Nova Remessa
+              </a>
+            </Button>
+            <Button asChild>
+              <Link to="/remessas/nova"><Plus className="h-4 w-4" /> Nova remessa</Link>
+            </Button>
+          </div>
         }
       />
 
@@ -65,7 +74,7 @@ function RemessasPage() {
                 <TableRow key={r.id} className="cursor-pointer hover:bg-muted/40">
                   <TableCell className="font-mono">#{r.numero}</TableCell>
                   <TableCell className="font-medium">{r.costureiras?.nome}</TableCell>
-                  <TableCell>{format(new Date(r.data_envio), "dd/MM/yyyy", { locale: ptBR })}</TableCell>
+                  <TableCell>{format(parseISO(r.data_envio), "dd/MM/yyyy", { locale: ptBR })}</TableCell>
                   <TableCell>{r.data_prevista_retorno ? format(new Date(r.data_prevista_retorno), "dd/MM/yyyy", { locale: ptBR }) : "—"}</TableCell>
                   <TableCell className="text-center tabular-nums">{totalRet}/{totalEnv}</TableCell>
                   <TableCell className="text-right tabular-nums">

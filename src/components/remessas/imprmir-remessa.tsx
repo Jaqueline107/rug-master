@@ -1,11 +1,12 @@
+import { nomeTapete, type ModeloNome } from "@/lib/nome-tapete";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 type Item = {
-  tapete: { nome: string; tipos_tapete?: { nome: string } };
+  tapete: ModeloNome | null;
   servico: { nome: string };
   quantidade_enviada: number;
   quantidade_retornada: number;
@@ -166,7 +167,7 @@ export function ImprimirRemessa({ remessa, onClose }: ImprimirRemessaProps) {
               <div className="info-item">
                 <div className="info-label">DATA DE ENVIO</div>
                 <div className="info-value">
-                  {remessa.data_envio ? format(new Date(remessa.data_envio), "dd/MM/yyyy", { locale: ptBR }) : '-'}
+                  {remessa.data_envio ? format(parseISO(remessa.data_envio), "dd/MM/yyyy", { locale: ptBR }) : '-'}
                 </div>
               </div>
             </div>
@@ -184,7 +185,6 @@ export function ImprimirRemessa({ remessa, onClose }: ImprimirRemessaProps) {
             <thead>
               <tr>
                 <th style={{ border: '1px solid #ddd', padding: '12px', background: '#f5f5f5' }}>Tapete</th>
-                <th style={{ border: '1px solid #ddd', padding: '12px', background: '#f5f5f5' }}>Tipo</th>
                 <th style={{ border: '1px solid #ddd', padding: '12px', background: '#f5f5f5' }}>Serviço</th>
                 <th style={{ border: '1px solid #ddd', padding: '12px', textAlign: 'center', background: '#f5f5f5' }}>Enviado</th>
                 <th style={{ border: '1px solid #ddd', padding: '12px', textAlign: 'center', background: '#f5f5f5' }}>Conferência</th>
@@ -194,8 +194,7 @@ export function ImprimirRemessa({ remessa, onClose }: ImprimirRemessaProps) {
             <tbody>
               {remessa.remessa_itens?.map((item, idx) => (
                 <tr key={idx}>
-                  <td style={{ border: '1px solid #ddd', padding: '12px' }}>{item.tapete?.nome || '-'}</td>
-                  <td style={{ border: '1px solid #ddd', padding: '12px' }}>{item.tapete?.tipos_tapete?.nome || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '12px' }}>{nomeTapete(item.tapete) || '-'}</td>
                   <td style={{ border: '1px solid #ddd', padding: '12px' }}>{item.servico?.nome || '-'}</td>
                   <td style={{ border: '1px solid #ddd', padding: '12px', textAlign: 'center' }}>{item.quantidade_enviada}</td>
                   <td style={{ border: '1px solid #ddd', padding: '12px', textAlign: 'center' }}></td>

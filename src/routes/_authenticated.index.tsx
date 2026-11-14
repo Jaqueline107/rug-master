@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/app-shell";
 import { useList, brl } from "@/lib/data";
 import { Truck, AlertCircle, CheckCircle2, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/_authenticated/")({
@@ -31,7 +31,7 @@ function Dashboard() {
 
   const now = new Date();
   const mesAtual = remessas.filter((r) => {
-    const d = new Date(r.data_envio);
+    const d = parseISO(r.data_envio);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
   const totalMes = mesAtual.reduce((s, r) => {
@@ -86,7 +86,7 @@ function Dashboard() {
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Enviada em {format(new Date(r.data_envio), "dd/MM/yyyy", { locale: ptBR })}
+                        Enviada em {format(parseISO(r.data_envio), "dd/MM/yyyy", { locale: ptBR })}
                       </p>
                     </div>
                     <div className="text-right">

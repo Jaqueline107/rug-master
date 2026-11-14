@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowLeft, FileDown, Save } from "lucide-react";
 import { brl } from "@/lib/data";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -27,6 +27,7 @@ function NovoPagamentoPage() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const [costureiraId, setCostureiraId] = useState<string>("");
+  const [modo, setModo] = useState<"retornado" | "enviado">("retornado");
   const [selecionadas, setSelecionadas] = useState<Record<string, number>>({});
   const [dataPagamento, setDataPagamento] = useState(new Date().toISOString().slice(0, 10));
   const [forma, setForma] = useState("pix");
@@ -43,17 +44,21 @@ function NovoPagamentoPage() {
   });
 
   const { data: pendentes = [], isPending: carregandoPendentes, isError: erroPendentes, refetch: recarregarPendentes } = useQuery({
-    queryKey: ["remessas-a-pagar", costureiraId],
+    queryKey: ["remessas-a-pagar", costureiraId, modo],
     enabled: !!costureiraId,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("remessas_a_pagar")
         .select("*")
         .eq("costureira_id", costureiraId)
-        .gt("valor_pendente", 0)
+        .gt(modo === "enviado" ? "saldo_total_enviado" : "valor_pendente", 0)
         .order("data_envio");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []).map((remessa) => ({
+        ...remessa,
+        valor_devido: modo === "enviado" ? remessa.valor_total_enviado : remessa.valor_devido,
+        valor_pendente: modo === "enviado" ? remessa.saldo_total_enviado : remessa.valor_pendente,
+      }));
     },
   });
 
@@ -96,7 +101,7 @@ function NovoPagamentoPage() {
       head: [["Remessa", "Envio", "Status", "Valor devido", "Já pago", "A pagar"]],
       body: linhas.map((r: any) => [
         `#${r.numero}`,
-        format(new Date(r.data_envio), "dd/MM/yyyy"),
+        format(parseISO(r.data_envio), "dd/MM/yyyy"),
         r.status,
         brl(Number(r.valor_devido)),
         brl(Number(r.valor_ja_pago)),
@@ -114,6 +119,11 @@ function NovoPagamentoPage() {
     if (!costureiraId) return toast.error("Escolha uma costureira");
     const entries = Object.entries(selecionadas).filter(([, v]) => v > 0);
     if (entries.length === 0) return toast.error("Selecione ao menos uma remessa");
+    if (carregandoPendentes || erroPendentes) return toast.error("Confira a lista de remessas antes de pagar.");
+    if (entries.some(([id, valor]) => {
+      const remessa = pendentes.find((r) => r.remessa_id === id);
+      return !remessa || !Number.isFinite(valor) || valor > Number(remessa.valor_pendente);
+    })) return toast.error("O valor não pode ultrapassar o saldo disponível da remessa.");
     setSaving(true);
     try {
       let comprovanteUrl: string | null = null;
@@ -176,6 +186,22 @@ function NovoPagamentoPage() {
             </SelectContent>
           </Select>
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="modo-pagamento">Remessas a mostrar</Label>
+          <Select value={modo} onValueChange={(value) => {
+            setModo(value === "enviado" ? "enviado" : "retornado");
+            setSelecionadas({});
+          }} disabled={saving}>
+            <SelectTrigger id="modo-pagamento"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="retornado">Somente concluídas</SelectItem>
+              <SelectItem value="enviado">Todas em aberto</SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            {modo === "enviado" ? "Inclui saldos de peças enviadas que ainda não retornaram." : "Considera somente as quantidades que já retornaram."}
+          </p>
+        </div>
       </div>
 
       {costureiraId && (
@@ -227,7 +253,7 @@ function NovoPagamentoPage() {
                           />
                         </TableCell>
                         <TableCell className="font-mono text-sm">#{r.numero}</TableCell>
-                        <TableCell>{format(new Date(r.data_envio), "dd/MM/yyyy")}</TableCell>
+                        <TableCell>{format(parseISO(r.data_envio), "dd/MM/yyyy")}</TableCell>
                         <TableCell><span className="text-xs uppercase text-muted-foreground">{r.status}</span></TableCell>
                         <TableCell className="text-right tabular-nums">{brl(Number(r.valor_devido))}</TableCell>
                         <TableCell className="text-right tabular-nums text-muted-foreground">{brl(Number(r.valor_ja_pago))}</TableCell>
@@ -235,7 +261,7 @@ function NovoPagamentoPage() {
                           {checked ? (
                             <Input
                               type="number"
-                              step="0.01"
+                              step="0.01" min={0} max={Number(r.valor_pendente)}
                               className="h-8 text-right w-28 ml-auto"
                               value={selecionadas[r.remessa_id]}
                               onChange={(e) => setSelecionadas({ ...selecionadas, [r.remessa_id]: parseFloat(e.target.value) || 0 })}
